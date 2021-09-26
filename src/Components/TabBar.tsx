@@ -6,7 +6,7 @@ const StyledHead = styled.head`
   width: 100%;
   left: 256px;
   height: 4rem;
-  background-color: rgb(156, 151, 151);
+  background-color: rgb(255, 255, 255);
   align-items: center;
 
 `;
