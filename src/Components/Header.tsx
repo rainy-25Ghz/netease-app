@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledHead = styled.div`
+const StyledHead = styled.header`
   display: flex;
   position: fixed;
   top: 0px;
@@ -14,11 +14,14 @@ const StyledHead = styled.div`
   border-bottom-width: 1px;
   border-color: rgba(237, 242, 247, 1);
   background-color: rgb(236, 65, 65);
-  .logo{
-    width:256px;
+  .logo {
+    width: 256px;
   }
 `;
 
-
-
 export const Header = StyledHead;
+export const HeaderContent = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`;

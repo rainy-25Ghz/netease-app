@@ -6,17 +6,28 @@ const fetcher = async (...args: Parameters<typeof window.fetch>) => {
 export const logout = async () => {
   await fetch(`/logout`);
 };
-export const useAuth = (phone: string, password: string) => {
-  const key = `/login/cellphone?phone=${phone}&password=${password}`;
-  const { data, error,mutate } = useSWR(
-    key,
-    fetcher
-  );
-  return {
-    login: data?.code === 200,
-    isLoading: !error && !data,
-    isError: error,
-    mutate,
-    key
-  };
+export const login = async (phone: string, password: string) => {
+  const res = await fetch(
+    `/login/cellphone?phone=${phone}&password=${password}`
+  ).then((res) => res.json());
+  return res as any;
 };
+export const checkCookie=()=>{
+  return document.cookie.indexOf("MUSIC_U=")!==-1;
+}
+// export const useAuth = () => {
+//   const key = `/login/status`;
+//   const { data, error, mutate } = useSWR(key, fetcher);
+//   let loginStatus = false;
+//   console.log(data?.data);
+//   if (data?.data?.account) {
+//     loginStatus = true;
+//   }
+//   return {
+//     loginStatus: loginStatus,
+//     isLoading: !error && !data,
+//     isError: error,
+//     mutate,
+//     key,
+//   };
+// };
