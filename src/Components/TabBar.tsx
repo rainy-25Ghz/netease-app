@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-const StyledHead = styled.head`
+const StyledHead = styled.header`
   display: flex;
   position: fixed;
   top: 4rem;

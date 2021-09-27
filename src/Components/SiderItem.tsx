@@ -22,5 +22,5 @@ interface Props {
 }
 
 export const SiderItem = ({ text = "", activated = false }: Props) => {
-  return <StyledDiv activated={activated}>{text}</StyledDiv>;
+  return <StyledDiv activated={activated} >{text}</StyledDiv>;
 };

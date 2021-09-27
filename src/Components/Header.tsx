@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledHead = styled.head`
+const StyledHead = styled.div`
   display: flex;
   position: fixed;
   top: 0px;
@@ -14,15 +14,11 @@ const StyledHead = styled.head`
   border-bottom-width: 1px;
   border-color: rgba(237, 242, 247, 1);
   background-color: rgb(236, 65, 65);
+  .logo{
+    width:256px;
+  }
 `;
 
-interface Props {}
 
-export const Header = (props: Props) => {
-  return (
-    <StyledHead>
-        <img src="/logo_netease.png" alt={""}/>
-      <p>netease</p>
-    </StyledHead>
-  );
-};
+
+export const Header = StyledHead;
