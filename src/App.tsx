@@ -44,9 +44,10 @@ function App() {
   const handleLogin = () => {
     login(phone.current, psw.current)
       .then((res) => {
-        if (res.code === 200&&checkCookie()) {
+        if (res.code === 200) {
           setOpen(false);
           setLoginStatus(true);
+          setErrTextField(false);
         } else {
           setErrTextField(true);
         }
