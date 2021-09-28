@@ -1,10 +1,11 @@
+import { createContext, useContext } from "react";
 import useSWR from "swr";
 
 const fetcher = async (...args: Parameters<typeof window.fetch>) => {
   return fetch(...args).then((res) => res.json());
 };
 export const logout = async () => {
-  return await fetch(`/logout`) as any;
+  return await fetcher(`/logout`) as any;
 };
 export const login = async (phone: string, password: string) => {
   const res = await fetch(
@@ -14,6 +15,17 @@ export const login = async (phone: string, password: string) => {
 };
 export const checkCookie=()=>{
   return document.cookie.indexOf("MUSIC_U=")!==-1;
+}
+
+export const LoginStatusContext = createContext<boolean>(false);
+
+export const useAuth=()=>{
+  const loginStatus = useContext(LoginStatusContext);
+  return loginStatus;
+}
+export const UidContext = createContext<number|undefined>(undefined);
+export const useUid=()=>{
+  const Uid=useContext(UidContext);
 }
 // export const useAuth = () => {
 //   const key = `/login/status`;
