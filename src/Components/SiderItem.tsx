@@ -17,10 +17,7 @@ const StyledDiv = styled.div<Props>`
 
 `;
 interface Props {
-  text?: string;
   activated?: boolean;
 }
 
-export const SiderItem = ({ text = "", activated = false }: Props) => {
-  return <StyledDiv activated={activated} >{text}</StyledDiv>;
-};
+export const SiderItem = StyledDiv ;

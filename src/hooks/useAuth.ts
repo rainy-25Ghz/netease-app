@@ -4,7 +4,7 @@ const fetcher = async (...args: Parameters<typeof window.fetch>) => {
   return fetch(...args).then((res) => res.json());
 };
 export const logout = async () => {
-  await fetch(`/logout`);
+  return await fetch(`/logout`) as any;
 };
 export const login = async (phone: string, password: string) => {
   const res = await fetch(
