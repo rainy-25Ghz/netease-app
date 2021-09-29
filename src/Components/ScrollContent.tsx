@@ -11,8 +11,11 @@ const StyledDiv = styled.div`
   max-width: calc(100vw - 256px);
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
   overflow-y: scroll;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   &::-webkit-scrollbar {
     width: 10px;
     background-color: transparent;
