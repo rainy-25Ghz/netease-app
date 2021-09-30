@@ -43,6 +43,8 @@ import useSWR from "swr";
 import { useMount } from "./hooks/useMount";
 import { Carousel } from "./Components/Carousel";
 import { fetcher } from "./util/network";
+import { StyledArrowLeft, StyledArrowRight } from "./Components/Arrow";
+import { Title } from "./Components/Title";
 
 const StyledAvatar = styled(Avatar)`
     margin-right: 8px;
@@ -208,14 +210,18 @@ function App() {
                                 <ScrollContent>
                                     <Carousel
                                         {...{
-                                            dots: true,
+                                            dots: false,
                                             infinite: true,
-                                            slidesToShow: 3,
+                                            slidesToShow: 1,
                                             slidesToScroll: 1,
                                             autoplay: true,
-                                            autoplaySpeed: 500
+                                            autoplaySpeed: 2000,
+                                            nextArrow: <StyledArrowRight />,
+                                            prevArrow: <StyledArrowLeft />,
                                         }}
                                     />
+                                    <Title>推荐歌单</Title>
+
                                     {`login:${loginStatus}\n userdata:${JSON.stringify(
                                         user
                                     )} ${loginStatus ? "已登录" : "未登录"}`}
