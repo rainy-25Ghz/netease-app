@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
-import styled from "styled-components";
+import styled from '@emotion/styled';
 const StyledDiv = styled.div<Props>`
 	background-color: ${(props) =>
 		props.activated ? "rgb(246,246,247)" : "white"};

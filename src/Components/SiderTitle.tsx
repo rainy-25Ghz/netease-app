@@ -1,4 +1,4 @@
-import  styled  from "styled-components";
+import  styled  from '@emotion/styled';
 export const SiderTitle = styled.div`
 	color: #808080;
 	height: 2rem;

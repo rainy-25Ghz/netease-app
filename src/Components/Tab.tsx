@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled from '@emotion/styled';
 const StyledDiv = styled.div<Partial<Props>>`
   font-size: ${(props) => (props.activated ? "22px" : "18px")};
   font-weight: ${(props) => (props.activated ? "600" : "")};

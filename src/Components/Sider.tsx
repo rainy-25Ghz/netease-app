@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled from '@emotion/styled';
 const StyledAside = styled.aside`
   top: 4rem;
   height: calc(100vh - 4rem - 6rem);
