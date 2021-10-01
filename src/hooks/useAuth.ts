@@ -1,9 +1,8 @@
 import { createContext, useContext } from "react";
 import useSWR from "swr";
+import { fetcher } from "../util/network";
 
-const fetcher = async (...args: Parameters<typeof window.fetch>) => {
-  return fetch(...args).then((res) => res.json());
-};
+
 export const logout = async () => {
   return await fetcher(`/logout`) as any;
 };
@@ -23,23 +22,4 @@ export const useAuth=()=>{
   const loginStatus = useContext(LoginStatusContext);
   return loginStatus;
 }
-export const UidContext = createContext<number|undefined>(undefined);
-export const useUid=()=>{
-  const Uid=useContext(UidContext);
-}
-// export const useAuth = () => {
-//   const key = `/login/status`;
-//   const { data, error, mutate } = useSWR(key, fetcher);
-//   let loginStatus = false;
-//   console.log(data?.data);
-//   if (data?.data?.account) {
-//     loginStatus = true;
-//   }
-//   return {
-//     loginStatus: loginStatus,
-//     isLoading: !error && !data,
-//     isError: error,
-//     mutate,
-//     key,
-//   };
-// };
+
