@@ -1,44 +1,42 @@
-import React from "react";
-import styled from '@emotion/styled';
-const StyledAside = styled.aside`
-  top: 4rem;
-  height: calc(100vh - 4rem - 6rem);
-  position: fixed;
-  width: 256px;
-  z-index: 1000;
- 
-  
-`;
-const StyledDiv = styled.div`
-  border-color: rgba(237, 242, 247, 1);
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 1rem;
-  padding-right: 2px;
-  border-right-width: 1px;
-  border-right-style: solid;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 10px;
-    background-color: transparent;
-
-  }
-  &::-webkit-scrollbar-thumb {
-    width: 10px;
-    border-radius: 4px;
-    background-color: #80808022;
-  }
-`;
-
-interface Props {
-  children: React.ReactNode;
-}
-
-export const Sider = (props: Props) => {
-  return (
-    <StyledAside>
-      <StyledDiv>{props.children}</StyledDiv>
-    </StyledAside>
-  );
+import { useContext, useState } from "react";
+import useSWR from "swr";
+import { LoginStatusContext } from "../hooks/useAuth";
+import { fetcher } from "../util/network";
+import { SiderBar } from "./SiderBar";
+import { SiderLink } from "./SiderLink";
+import { SiderTitle } from "./SiderTitle";
+const linkData = [
+	{ path: "/findmusic", text: "发现音乐" },
+	{ path: "/personalFM", text: "私人FM" },
+];
+const linkDataLogin = [
+	{ path: "/findmusic", text: "发现音乐" },
+	{ path: "/personalFM", text: "私人FM" },
+	{ path: null, text: "收藏的音乐" },
+];
+export const Sider = () => {
+    const [index,setIndex]=useState(0);
+	const loginData = useContext(LoginStatusContext);
+	const { data: listData, error } = useSWR(
+		() => `/user/playlist?uid=${loginData.uid}`,
+		fetcher
+	);
+	return (
+		<SiderBar>
+			{!loginData.loginStatus &&
+				linkData.map(({ path, text },i) => {
+					return <SiderLink path={path} text={text} activated={i===index} onClick={()=>{setIndex(i)}}></SiderLink>;
+				})}
+			{loginData.loginStatus &&
+				linkDataLogin.map(({ path, text },i) => {
+                    if(path)
+					return <SiderLink path={path} text={text} activated={i===index} onClick={()=>{setIndex(i)}}></SiderLink>;
+                    else
+                    return <SiderTitle>{text}</SiderTitle>
+				})}
+			{loginData.loginStatus && listData && (
+				<p>{listData?.playlist?.length}</p>
+			)}
+		</SiderBar>
+	);
 };

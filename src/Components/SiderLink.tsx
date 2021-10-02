@@ -24,12 +24,14 @@ interface Props {
 	activated?: boolean;
 	path: string;
 	text: string;
+	onClick?:()=>void;
 }
 
-export const SiderLink = ({ text, path, activated }: Props) => {
+export const SiderLink = ({ text, path, activated ,onClick}: Props) => {
 	let history = useHistory();
 	const handleClick = () => {
 		history.push(path);
+		onClick&&onClick();
 	};
 	return (
 		<StyledDiv {...{ text, path, activated }} onClick={handleClick}>

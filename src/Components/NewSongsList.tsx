@@ -22,7 +22,6 @@ const StyledDiv = styled.div`
             flex-direction: column;
             text-align: left;
             justify-content: center;
-
             .author {
                 color: #666565b9;
             }

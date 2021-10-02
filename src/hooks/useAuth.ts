@@ -16,10 +16,14 @@ export const checkCookie=()=>{
   return document.cookie.indexOf("MUSIC_U=")!==-1;
 }
 
-export const LoginStatusContext = createContext<boolean>(false);
+interface LoginStatusContextInterface{
+  loginStatus:boolean;
+  uid:number|null;
+}
+
+export const LoginStatusContext = createContext<LoginStatusContextInterface>({loginStatus:false,uid:null});
 
 export const useAuth=()=>{
-  const loginStatus = useContext(LoginStatusContext);
-  return loginStatus;
+  return useContext(LoginStatusContext);
 }
 
