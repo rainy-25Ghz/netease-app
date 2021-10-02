@@ -17,7 +17,7 @@ const StyledTypo = styled.span`
 		display: inline-block;
 	}
 	user-select: none; /* Standard */
-	&:hover {
+	& span:hover {
 		cursor: pointer;
 	}
 `;
