@@ -25,14 +25,14 @@ export const Sider = () => {
 		<SiderBar>
 			{!loginData.loginStatus &&
 				linkData.map(({ path, text },i) => {
-					return <SiderLink path={path} text={text} activated={i===index} onClick={()=>{setIndex(i)}}></SiderLink>;
+					return <SiderLink key={text} path={path} text={text} activated={i===index} onClick={()=>{setIndex(i)}}></SiderLink>;
 				})}
 			{loginData.loginStatus &&
 				linkDataLogin.map(({ path, text },i) => {
                     if(path)
-					return <SiderLink path={path} text={text} activated={i===index} onClick={()=>{setIndex(i)}}></SiderLink>;
+					return <SiderLink key={text}path={path} text={text} activated={i===index} onClick={()=>{setIndex(i)}}></SiderLink>;
                     else
-                    return <SiderTitle>{text}</SiderTitle>
+                    return <SiderTitle key={text}>{text}</SiderTitle>
 				})}
 			{loginData.loginStatus && listData && (
 				<p>{listData?.playlist?.length}</p>

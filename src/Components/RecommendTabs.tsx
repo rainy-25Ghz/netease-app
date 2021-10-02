@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { useLocation, useRouteMatch } from 'react-router';
 import { Tab } from './Tab';
 import { TabBar } from './TabBar';
 
@@ -21,6 +22,16 @@ const tabMap=[
 ]
 export const RecommendTabs = (props: Props) => {
     const [tab, setTab] = useState<number>(0);
+    const match=useRouteMatch(tabMap.map(({path})=>`/findmusic/${path}`));
+    useLayoutEffect(() => {
+       for (let index = 0; index < tabMap.length; index++) {
+           const {path} = tabMap[index];
+           if(match?.path.indexOf(path)!==-1){
+               setTab(index);
+               break;
+           }
+       }
+    }, [match])
     return (
         <TabBar>
         {tabMap.map(

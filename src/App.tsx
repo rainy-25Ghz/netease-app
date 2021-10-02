@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import "./App.css";
 import { ContentWrapper } from "./Components/ContentWrapper";
 import { Footer } from "./Components/Footer";
@@ -51,6 +51,7 @@ import { PrivateContent } from "./Components/PrivateContent";
 import { NewSongsList } from "./Components/NewSongsList";
 import { RecommendMv } from "./Components/RecommendMv";
 import { RecommendTabs } from "./Components/RecommendTabs";
+import { MusicLists } from "./Components/MusicLists";
 
 const StyledAvatar = styled(Avatar)`
 	margin-right: 8px;
@@ -150,7 +151,8 @@ function App() {
 	> = (e) => {
 		psw.current = e.target.value;
 	};
-	const renderHeader = () => {
+	
+    const renderHeader = () => { 
 		return (
 			<Header>
 				<HeaderContent>
@@ -242,7 +244,7 @@ function App() {
                                                     }`} */}
 												</Route>
                                                 <Route path="/findmusic/lists">
-													{"recommend"}
+													<MusicLists></MusicLists>
 												</Route>
                                                 <Route path="/findmusic/newsongs">
 													{"newsongs"}
