@@ -52,6 +52,7 @@ import { NewSongsList } from "./Components/NewSongsList";
 import { RecommendMv } from "./Components/RecommendMv";
 import { RecommendTabs } from "./Components/RecommendTabs";
 import { MusicLists } from "./Components/MusicLists";
+import { LatestSongs } from "./Components/LatestSongs";
 
 const StyledAvatar = styled(Avatar)`
 	margin-right: 8px;
@@ -247,7 +248,7 @@ function App() {
 													<MusicLists></MusicLists>
 												</Route>
                                                 <Route path="/findmusic/newsongs">
-													{"newsongs"}
+													<LatestSongs></LatestSongs>
 												</Route>
 												<Redirect
 													to={{
