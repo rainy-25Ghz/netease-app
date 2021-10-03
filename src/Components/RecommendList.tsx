@@ -24,11 +24,12 @@ interface ListPicProps {
     src?: string;
     width?: number;
     height?: number;
+    bdr?:number;
 }
 export const StyledListPic = styled.div<ListPicProps>`
     width: ${(props) => (props.width ? `${props.width}rem` : "16rem")};
     height: ${(props) => (props.height ? `${props.height}rem` : "16rem")};
-    border-radius: 1rem;
+    border-radius:${(props) => (props.bdr ? `${props.bdr}rem` : "1rem")};
     background-image: url(${(props) => props.src?props.src:"/default.png"});
     background-size: contain;
 `;
