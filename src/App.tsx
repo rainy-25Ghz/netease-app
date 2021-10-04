@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+	createContext,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import "./App.css";
 import { ContentWrapper } from "./Components/ContentWrapper";
 import { Footer } from "./Components/Footer";
@@ -53,6 +59,11 @@ import { RecommendMv } from "./Components/RecommendMv";
 import { RecommendTabs } from "./Components/RecommendTabs";
 import { MusicLists } from "./Components/MusicLists";
 import { LatestSongs } from "./Components/LatestSongs";
+import { MusicContext } from "./util/context";
+import { MusicPlayer } from "./Components/MusicPlayer";
+import { Videos } from "./Components/Videos";
+import { VideoPlayer } from "./Components/VideoPlayer";
+import { MusicList } from "./Components/MusicList";
 
 const StyledAvatar = styled(Avatar)`
 	margin-right: 8px;
@@ -86,6 +97,11 @@ function App() {
 		() => `/user/detail?uid=${uid}`,
 		fetcher
 	);
+	const [songIds, setSongIds] = useState<number[]>([]);
+	const [artists, setArtists] = useState<string>("");
+	const [duration, setDuration] = useState<string>("");
+	const [name, setName] = useState<string>("");
+	const [url, setUrl] = useState<string>("");
 
 	useMount(() => {
 		const cookie_ = window.localStorage.getItem("cookie");
@@ -152,8 +168,8 @@ function App() {
 	> = (e) => {
 		psw.current = e.target.value;
 	};
-	
-    const renderHeader = () => { 
+
+	const renderHeader = () => {
 		return (
 			<Header>
 				<HeaderContent>
@@ -188,10 +204,9 @@ function App() {
 			</Header>
 		);
 	};
-	
 
 	return (
-		<LoginStatusContext.Provider value={{loginStatus,uid}}>
+		<LoginStatusContext.Provider value={{ loginStatus, uid }}>
 			<ThemeProvider theme={theme}>
 				<Router>
 					<div className="App">
@@ -207,74 +222,107 @@ function App() {
 									<Route path="*">{null}</Route>
 								</Switch>
 								<ScrollContent>
-									<Switch>
-										<Route path="/findmusic">
-											<Switch>
-												<Route path="/findmusic/personalrecommend">
-													<Carousel
-														{...{
-															dots: false,
-															infinite: true,
-															slidesToShow: 1,
-															slidesToScroll: 1,
-															autoplay: true,
-															autoplaySpeed: 2000,
-															nextArrow: (
-																<StyledArrowRight />
-															),
-															prevArrow: (
-																<StyledArrowLeft />
-															),
+									<MusicContext.Provider
+										value={{
+											name,
+											url,
+											artists,
+											duration,
+											setSongIds,
+											songIds,
+											setArtists,
+											setDuration,
+											setUrl,
+											setName,
+										}}
+									>
+										<Switch>
+											<Route path="/findmusic">
+												<Switch>
+													<Route path="/findmusic/personalrecommend">
+														<Carousel
+															{...{
+																dots: false,
+																infinite: true,
+																slidesToShow: 1,
+																slidesToScroll: 1,
+																autoplay: true,
+																autoplaySpeed: 2000,
+																nextArrow: (
+																	<StyledArrowRight />
+																),
+																prevArrow: (
+																	<StyledArrowLeft />
+																),
+															}}
+														/>
+														<Title>推荐歌单</Title>
+														<RecommendList />
+														<Title>独家放送</Title>
+														<PrivateContent />
+														<Title>最新音乐</Title>
+														<NewSongsList />
+														<Title>推荐MV</Title>
+														<RecommendMv />
+													</Route>
+													<Route path="/findmusic/lists">
+														<MusicLists></MusicLists>
+													</Route>
+													<Route path="/findmusic/newsongs">
+														<LatestSongs></LatestSongs>
+													</Route>
+													<Redirect
+														to={{
+															pathname:
+																"/findmusic/personalrecommend",
 														}}
-													/>
-													<Title>推荐歌单</Title>
-													<RecommendList />
-													<Title>独家放送</Title>
-													<PrivateContent />
-													<Title>最新音乐</Title>
-													<NewSongsList />
-													<Title>推荐MV</Title>
-													<RecommendMv />
-
-													{/* {`login:${loginStatus}\n userdata:${JSON.stringify(
-                                                        user
-                                                    )} ${
-                                                        loginStatus
-                                                            ? "已登录"
-                                                            : "未登录"
-                                                    }`} */}
-												</Route>
-                                                <Route path="/findmusic/lists">
-													<MusicLists></MusicLists>
-												</Route>
-                                                <Route path="/findmusic/newsongs">
-													<LatestSongs></LatestSongs>
-												</Route>
-												<Redirect
-													to={{
-														pathname:
-															"/findmusic/personalrecommend",
-													}}
-												></Redirect>
-											</Switch>
-										</Route>
-										<Route path="/personalFM">
-											<div>FM</div>
-										</Route>
-										<Redirect
-											to={{
-												pathname:
-													"/findmusic/personalrecommend",
-												state: { from: "/" },
-											}}
-										></Redirect>
-									</Switch>
+													></Redirect>
+												</Switch>
+											</Route>
+											<Route path="/videos">
+												<Switch>
+													<Route
+														path="/videos/:vid"
+														children={
+															<VideoPlayer />
+														}
+													></Route>
+													<Route path="/videos">
+														<Videos></Videos>
+													</Route>
+												</Switch>
+											</Route>
+                                            <Route path="/list/:id" children={<MusicList></MusicList>}></Route>
+											<Redirect
+												to={{
+													pathname:
+														"/findmusic/personalrecommend",
+													state: { from: "/" },
+												}}
+											></Redirect>
+										</Switch>
+									</MusicContext.Provider>
 								</ScrollContent>
 							</ContentWrapper>
 						</Layout>
 
 						<Footer>
-							<span>footer</span>
+							<MusicContext.Provider
+								value={{
+									name,
+									url,
+									artists,
+									duration,
+									setSongIds,
+									songIds,
+									setArtists,
+									setDuration,
+									setUrl,
+									setName,
+								}}
+							>
+								<MusicPlayer></MusicPlayer>
+							</MusicContext.Provider>
 						</Footer>
 						<Dialog open={open}>
 							<DialogTitle>登录</DialogTitle>

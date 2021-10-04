@@ -1,20 +1,18 @@
 import styled from "@emotion/styled";
 import { CircularProgress } from "@mui/material";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import useSWR, { Middleware } from "swr";
+import useSWR from "swr";
 import { fetcher } from "../util/network";
-import { Categories } from "./Categories";
+import { VidCategories, vidCats } from "./Categories";
 import { StyledListPic } from "./RecommendList";
-
-export const StyledContainer = styled.div`
+const StyledContainer = styled.div`
 	margin-top: 1rem;
-
 	.status {
 		margin-bottom: 1rem;
 		font-size: 16px;
 		height: 32px;
-		width: 86rem;
+		width: 70rem;
 		display: flex;
 		align-items: center;
 		.wrapper {
@@ -46,7 +44,7 @@ export const StyledContainer = styled.div`
 	}
 	.list {
 		display: flex;
-		width: 86rem;
+		width: 70rem;
 		flex-wrap: wrap;
 		justify-content: space-between;
 		align-content: space-between;
@@ -54,55 +52,52 @@ export const StyledContainer = styled.div`
 			display: flex;
 			flex-direction: column;
 			width: 16rem;
-			height: 20rem;
+			height: 14rem;
 			span {
 				text-align: left;
 			}
-			.name {
-				text-decoration: none;
-				color: black;
-			}
 		}
 	}
+    .link{
+        text-decoration:none;
+        color:black;
+    }
 `;
+interface Props {}
 
-export const MusicLists = () => {
-	const [currCat, setCurrCat] = useState("全部歌单");
-	const setCurrCatMemo = useCallback(setCurrCat, [currCat]);
+export const Videos = (props: Props) => {
+	const [currCat, setCurrCat] = useState("最佳饭制");
 	const [offset, setOffset] = useState(0);
-	const [loading, setLoading] = useState(false);
-	const [playlists, setPlaylists] = useState<any[]>([]);
+	const [videos, setVideos] = useState<any[]>([]);
 	const divRef = useRef<HTMLDivElement>(null);
 	const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		(async () => {
 			setLoading(true);
+			const item = vidCats.find(({ name }) => name === currCat);
 			const res: any = await fetch(
-				`/top/playlist?limit=20&cat=${currCat}&offset=${offset}`
+				`/video/group?id=${item?.id}&&offset=${offset * 8}`
 			).then((res) => res.json());
-
-			const { playlists: newPlaylists } = res;
-			setPlaylists(newPlaylists);
+			const { datas } = res;
+			setVideos((videos) => [...videos, ...datas]);
+			setLoading(false);
+		})();
+	}, [offset]);
+	useEffect(() => {
+		(async () => {
+            setVideos([]);
+			setLoading(true);
+			const item = vidCats.find(({ name }) => name === currCat);
+			const res: any = await fetch(
+				`/video/group?id=${item?.id}`
+			).then((res) => res.json());
+			const { datas } = res;
+			setVideos(datas);
 			setLoading(false);
 		})();
 	}, [currCat]);
-
-	useEffect(() => {
-		if (offset <= 100)
-			(async () => {
-				setLoading(true);
-				const res: any = await fetch(
-					`/top/playlist?limit=20&cat=${currCat}&offset=${
-						offset * 20
-					}`
-				).then((res) => res.json());
-
-				const { playlists: newPlaylists } = res;
-				setPlaylists([...playlists, ...newPlaylists]);
-				setLoading(false);
-			})();
-	}, [offset]);
 
 	useEffect(() => {
 		const $node = divRef.current as HTMLDivElement;
@@ -124,23 +119,32 @@ export const MusicLists = () => {
 			}
 		};
 	}, [divRef.current]);
-
 	return (
 		<StyledContainer>
-			<Categories setCurrCat={setCurrCatMemo} currCat={currCat} />
+			<VidCategories
+				currCat={currCat}
+				setCurrCat={setCurrCat}
+			></VidCategories>
 			<div className="list">
-				{playlists.map(
-					({ coverImgUrl, name ,id}: any, index, playlists) => {
+				{videos &&
+					videos.map(({ data }: any, index: number) => {
+						let { coverUrl, title, name,vid } = data;
+						if (name) {
+							title = name;
+						}
 						return (
-							<div className="item" key={name}>
+							<div className="item" key={title}>
 								<StyledListPic
-									src={coverImgUrl}
+									src={coverUrl}
+									width={16}
+									height={9}
 								></StyledListPic>
-								<Link className="name" to={`/list/${id}`}>{name}</Link>
+								<div className="name">
+									<Link className="link" to={`/videos/${vid}`}>{title}</Link>
+								</div>
 							</div>
 						);
-					}
-				)}
+					})}
 			</div>
 			<div ref={divRef} style={{ width: "100%", height: "2rem" }}>
 				{loading && <CircularProgress></CircularProgress>}

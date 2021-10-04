@@ -4,7 +4,9 @@ import { Button, CircularProgress } from "@mui/material";
 import React, {
 	Dispatch,
 	useCallback,
+	useContext,
 	useEffect,
+	useMemo,
 	useRef,
 	useState,
 } from "react";
@@ -12,6 +14,7 @@ import useSWR, { Middleware } from "swr";
 import { fetcher } from "../util/network";
 import { StyledListPic } from "./RecommendList";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
+import { MusicContext } from "../util/context";
 export const StyledContainer = styled.div`
 	margin-top: 2rem;
 	width: 73rem;
@@ -45,40 +48,41 @@ export const StyledContainer = styled.div`
 			justify-self: flex-start;
 			width: 2rem;
 			color: rgb(236, 65, 65);
+			transform: translateX(-0.5rem);
 		}
 		.name {
 			margin-left: 1rem;
 			width: 10rem;
 			text-align: left;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 		.name-red {
 			margin-left: 1rem;
-			width: 7rem;
+			width: 10rem;
 			text-align: left;
 			color: rgb(236, 65, 65);
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 		.artists {
 			margin-left: 22rem;
 			width: 16rem;
 			color: #b9b9b9;
 			text-align: left;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 		.album {
 			width: calc(100% - 58.75rem);
 			color: #b9b9b9;
 			text-align: left;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 		.dur {
 			text-align: left;
@@ -156,14 +160,43 @@ export const PlayButton = ({ onClick }: PlayButtonProps) => {
 	);
 };
 export const LatestSongs = () => {
-	const [songIds, setSongIds] = useState<number[]>([]);
 	const [songId, setSongId] = useState(0);
+	const { songIds, setSongIds, setDuration, setArtists, setName, setUrl } =
+		useContext(MusicContext);
 	const [type, setType] = useState(0);
 	const { data: res } = useSWR(`/top/song?type=${type}`, fetcher);
 	useEffect(() => {
 		res && setSongIds(res.data.map(({ id }: any) => id));
 	}, [res]);
-	console.log(songId, songIds.slice(0, 5));
+	const derivedData = useMemo(() => {
+		return (
+			res &&
+			res?.data.map(
+				(
+					{ name, album, artists, id, duration }: any,
+					index: number
+				) => {
+					const { blurPicUrl: picUrl, name: albumName } = album;
+					const artistsName = artists
+						.map((artist: any) => artist.name)
+						.join("/");
+
+					const minutes = Math.floor(duration / 60000);
+					const seconds = Math.floor(duration / 1000) - minutes * 60;
+					return {
+						id,
+						artistsName,
+						name,
+						url: picUrl,
+						duration: `${minutes}:${
+							seconds < 10 ? `0${seconds}` : seconds
+						}`,
+					};
+				}
+			)
+		);
+	}, [res]);
+
 	return (
 		<StyledContainer>
 			<div className="header">
@@ -183,7 +216,15 @@ export const LatestSongs = () => {
 				</div>
 				<PlayButton
 					onClick={() => {
-						songIds.length && setSongId(songIds[0]);
+						if (derivedData) {
+							const first=derivedData[0];
+							console.log(first);
+							setName(first.name);
+							setDuration(first.duration);
+							setArtists(first.artistsName);
+							setUrl(first.url);
+						}
+						res&&setSongId(res.data[0].id);
 					}}
 				/>
 			</div>
@@ -194,7 +235,6 @@ export const LatestSongs = () => {
 						{ name, album, artists, id, duration }: any,
 						index: number
 					) => {
-						// return <div className="i">{ name}</div>;
 						const { blurPicUrl: picUrl, name: albumName } = album;
 						const artistsName = artists
 							.map((artist: any) => artist.name)
@@ -203,7 +243,9 @@ export const LatestSongs = () => {
 						const minutes = Math.floor(duration / 60000);
 						const seconds =
 							Math.floor(duration / 1000) - minutes * 60;
-
+						const dur=`${minutes}:${
+							seconds < 10 ? `0${seconds}` : seconds
+						}`
 						return (
 							<div
 								key={id}
@@ -215,6 +257,10 @@ export const LatestSongs = () => {
 								}}
 								onDoubleClick={() => {
 									setSongId(id);
+									setName(name);
+									setArtists(artistsName);
+									setDuration(dur);
+									setUrl(picUrl);
 								}}
 							>
 								{songId === id ? (
@@ -235,9 +281,7 @@ export const LatestSongs = () => {
 								)}
 								<div className="artists">{artistsName}</div>
 								<div className="album">{albumName}</div>
-								<div className="dur">{`${minutes}:${
-									seconds < 10 ? `0${seconds}` : seconds
-								}`}</div>
+								<div className="dur">{dur}</div>
 							</div>
 						);
 					}
