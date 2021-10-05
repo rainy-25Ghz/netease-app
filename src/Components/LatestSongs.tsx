@@ -15,6 +15,7 @@ import { fetcher } from "../util/network";
 import { StyledListPic } from "./RecommendList";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import { MusicContext } from "../util/context";
+import { useAudio } from "../hooks/useAudio";
 export const StyledContainer = styled.div`
 	margin-top: 2rem;
 	width: 73rem;
@@ -161,10 +162,20 @@ export const PlayButton = ({ onClick }: PlayButtonProps) => {
 };
 export const LatestSongs = () => {
 	const [songId, setSongId] = useState(0);
-	const { songIds, setSongIds, setDuration, setArtists, setName, setUrl,setCurrI } =
-		useContext(MusicContext);
+	const {
+		songIds,
+		setSongIds,
+		setDuration,
+		setArtists,
+		setName,
+		setUrl,
+		setCurrI,
+		currI
+	} = useContext(MusicContext);
 	const [type, setType] = useState(0);
 	const { data: res } = useSWR(`/top/song?type=${type}`, fetcher);
+	const audio = useAudio();
+
 	useEffect(() => {
 		res && setSongIds(res.data.map(({ id }: any) => id));
 	}, [res]);
@@ -197,6 +208,17 @@ export const LatestSongs = () => {
 		);
 	}, [res]);
 
+	useEffect(() => {
+		if (derivedData) {
+			const item = derivedData[currI];
+			console.log(item);
+			setName(item.name);
+			setDuration(item.duration);
+			setArtists(item.artistsName);
+			setUrl(item.url);
+		}
+	}, [currI]);
+
 	return (
 		<StyledContainer>
 			<div className="header">
@@ -217,16 +239,18 @@ export const LatestSongs = () => {
 				<PlayButton
 					onClick={() => {
 						if (derivedData) {
-							const first=derivedData[0];
+							const first = derivedData[0];
 							console.log(first);
 							setName(first.name);
 							setDuration(first.duration);
 							setArtists(first.artistsName);
 							setUrl(first.url);
+							console.log("first");
 						}
-						res&&setSongId(res.data[0].id);
-						const i=songIds.indexOf(songId);
-						if(i>=0){
+						res && setSongId(res.data[0].id);
+						const i = songIds.indexOf(songId);
+						if (i >= 0) {
+							console.log("setcurri");
 							setCurrI(i);
 						}
 					}}
@@ -247,9 +271,9 @@ export const LatestSongs = () => {
 						const minutes = Math.floor(duration / 60000);
 						const seconds =
 							Math.floor(duration / 1000) - minutes * 60;
-						const dur=`${minutes}:${
+						const dur = `${minutes}:${
 							seconds < 10 ? `0${seconds}` : seconds
-						}`
+						}`;
 						return (
 							<div
 								key={id}
@@ -259,15 +283,17 @@ export const LatestSongs = () => {
 										index % 2 === 0 && "#f5f5f5"
 									}`,
 								}}
-								onDoubleClick={() => {
+								onClick={() => {
 									setSongId(id);
 									setName(name);
 									setArtists(artistsName);
 									setDuration(dur);
 									setUrl(picUrl);
+									setCurrI(index);
+									audio.pause();
 								}}
 							>
-								{songId === id ? (
+								{songIds[currI] === id ? (
 									<EqualizerIcon className="equalizer" />
 								) : (
 									<div className="i">{index}</div>
@@ -278,7 +304,7 @@ export const LatestSongs = () => {
 									src={picUrl}
 									bdr={0.5}
 								></StyledListPic>
-								{songId === id ? (
+								{songIds[currI] === id ? (
 									<div className="name-red">{name}</div>
 								) : (
 									<div className="name">{name}</div>

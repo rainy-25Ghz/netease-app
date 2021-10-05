@@ -7,6 +7,7 @@ import {
 	VolumeUp,
 } from "@mui/icons-material";
 import { IconButton, LinearProgress, Slider } from "@mui/material";
+import { Box } from "@mui/system";
 import React, {
 	ChangeEvent,
 	createContext,
@@ -61,6 +62,9 @@ const Layout = styled.div`
 		}
 	}
 	.volume {
+		@media screen and (max-width:600px){
+			display: none;
+		}
 		display: flex;
 		align-items: center;
 		width: 20%;
@@ -85,6 +89,7 @@ export const MusicPlayer = () => {
 	const { name, artists, duration, url, currI, songIds, setCurrI } =
 		useContext(MusicContext);
 	const audio = useAudio();
+	const [enable, setEnable] = useState(false);
 	const [progress, setProgress] = useState(0);
 	const [volume, setVolume] = useState(50);
 	const { data: urlData } = useSWR(() => {
@@ -106,18 +111,24 @@ export const MusicPlayer = () => {
 		const listener2 = () => {
 			setPaused(true);
 		};
+		const listener3 = () => {
+			console.log("canplay");
+			setEnable(true);
+		};
 		audio.addEventListener("play", listener1);
 		audio.addEventListener("pause", listener2);
+		audio.addEventListener("canplay", listener3);
 		return () => {
 			audio.removeEventListener("play", listener1);
 			audio.removeEventListener("pause", listener2);
+			audio.removeEventListener("canplay", listener3);
 		};
 	}, []);
 
 	useEffect(() => {
 		if (urlData && urlData.data[0]) {
 			audio.src = urlData.data[0].url;
-			console.log(audio);
+			setEnable(false);
 		}
 	}, [urlData]);
 
@@ -132,12 +143,21 @@ export const MusicPlayer = () => {
 			</div>
 			<div className="control">
 				<div className="btns">
-					<IconButton className="prev-btn">
+					<IconButton
+						className="prev-btn"
+						onClick={() => {
+							audio.pause();
+							setPaused(true);
+							const newVal=currI <1?(currI-1+songIds.length):(currI-1)%songIds.length;
+							setCurrI(newVal);
+						}}
+					>
 						<SkipPrevious></SkipPrevious>
 					</IconButton>
 
 					{!paused ? (
 						<IconButton
+							disabled={!enable}
 							className="play-btn"
 							onClick={() => {
 								if (
@@ -153,6 +173,7 @@ export const MusicPlayer = () => {
 						</IconButton>
 					) : (
 						<IconButton
+							disabled={!enable}
 							className="play-btn"
 							onClick={() => {
 								if (
@@ -171,6 +192,7 @@ export const MusicPlayer = () => {
 						className="next-btn"
 						onClick={() => {
 							audio.pause();
+							setPaused(true);
 							setCurrI((currI + 1) % songIds.length);
 						}}
 					>
@@ -178,7 +200,7 @@ export const MusicPlayer = () => {
 					</IconButton>
 				</div>
 			</div>
-			<div className="volume">
+			<Box className="volume" >
 				<VolumeUp className="icon"></VolumeUp>
 				<Slider
 					onChange={(_, newVal) => {
@@ -189,7 +211,7 @@ export const MusicPlayer = () => {
 					}}
 					value={volume}
 				/>
-			</div>
+			</Box>
 		</Layout>
 	);
 };

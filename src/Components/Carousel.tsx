@@ -14,6 +14,12 @@ const StyledDiv = styled.div`
             color:white;
         }
 	}
+	@media screen and (max-width: 600px) {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100vw;
+	}
 	
 `;
 const StyledSlider = styled(Slider)``;
@@ -39,7 +45,7 @@ export const Carousel = (props: Settings & Props) => {
 			{bannerData ? (
 				<StyledSlider {...props}>
 					{bannerData.banners.map((img: any) => {
-						console.log(img);
+						// console.log(img);
 						return (
 							<StyledContainer
 								key={img.imageUrl}

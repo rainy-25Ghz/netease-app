@@ -57,7 +57,7 @@ export const Sider = () => {
 			)} */}
 			{loginData.loginStatus &&
 				listData &&
-				listData.playlist.map((item: any) => {
+				listData?.playlist?.map((item: any) => {
 					return (
 						<SiderLink
 							key={item.id}

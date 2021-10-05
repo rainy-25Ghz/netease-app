@@ -8,8 +8,7 @@ const StyledMain = styled.main<MainProps>`
 	width: 100%;
 	height: ${(props) =>
 		props.hasTitle ? `calc(100vh - 6rem)` : `calc(100vh - 4rem)`};
-	padding-top: ${(props) =>
-		props.hasTitle ? `8rem` : `6rem`};
+	padding-top: ${(props) => (props.hasTitle ? `8rem` : `6rem`)};
 `;
 const StyledDiv = styled.div`
 	max-width: calc(100vw - 256px);
@@ -20,24 +19,30 @@ const StyledDiv = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
-	&::-webkit-scrollbar {
-		width: 10px;
-		background-color: transparent;
+	@media screen and (max-width: 600px) {
+		width: 100%;
+		margin-right: 0;
+		justify-content: center;
 	}
-	&::-webkit-scrollbar-thumb {
-		width: 10px;
-		border-radius: 4px;
-		background-color: #6b6b6b2f;
+	@media screen and (min-width: 600px) {
+		&::-webkit-scrollbar {
+			width: 10px;
+			background-color: transparent;
+		}
+		&::-webkit-scrollbar-thumb {
+			width: 10px;
+			border-radius: 4px;
+			background-color: #6b6b6b2f;
+		}
 	}
 `;
 interface Props {
 	children: React.ReactNode;
 }
 export const ScrollContent = ({ children }: Props) => {
-  const location=useLocation();
+	const location = useLocation();
 	return (
-		<StyledMain hasTitle={location.pathname.indexOf("findmusic")!==-1}>
+		<StyledMain hasTitle={location.pathname.indexOf("findmusic") !== -1}>
 			<StyledDiv>{children}</StyledDiv>
 		</StyledMain>
 	);

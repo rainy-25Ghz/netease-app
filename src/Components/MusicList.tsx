@@ -118,6 +118,7 @@ export const MusicList = () => {
 			setName(name);
 			setArtists(artistName);
 			setDuration(dur);
+            setSongIds(getSongIds(listData));
 		}
 	}, [currI]);
 

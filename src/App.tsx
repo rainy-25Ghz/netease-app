@@ -214,7 +214,9 @@ function App() {
 						{renderHeader()}
 						<Layout>
 							<Sider></Sider>
-							<div style={{ flexBasis: "256px" }}></div>
+							<Box sx={{ flexBasis: "256px","@media screen and (max-width:600px)":{
+                                display:"none"
+                            } }}></Box>
 							<ContentWrapper>
 								<Switch>
 									<Route path="/findmusic">
