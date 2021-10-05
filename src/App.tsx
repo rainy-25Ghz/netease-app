@@ -102,6 +102,7 @@ function App() {
 	const [duration, setDuration] = useState<string>("");
 	const [name, setName] = useState<string>("");
 	const [url, setUrl] = useState<string>("");
+	const [currI, setCurrI] = useState(-1);
 
 	useMount(() => {
 		const cookie_ = window.localStorage.getItem("cookie");
@@ -133,7 +134,7 @@ function App() {
 					JSON.stringify(res?.account?.id)
 				);
 				window.localStorage.setItem("cookie", document.cookie);
-				console.log(document.cookie);
+				// console.log(document.cookie);
 			} else {
 				setErrTextField(true);
 			}
@@ -148,7 +149,7 @@ function App() {
 				setUid(null);
 				window.localStorage.removeItem("uid");
 				window.localStorage.removeItem("cookie");
-				window.location.reload();
+				// window.location.reload();
 			}
 		});
 	};
@@ -230,10 +231,12 @@ function App() {
 											duration,
 											setSongIds,
 											songIds,
+											currI,
 											setArtists,
 											setDuration,
 											setUrl,
 											setName,
+											setCurrI,
 										}}
 									>
 										<Switch>
@@ -292,7 +295,12 @@ function App() {
 													</Route>
 												</Switch>
 											</Route>
-                                            <Route path="/list/:id" children={<MusicList></MusicList>}></Route>
+											<Route
+												path="/list/:id"
+												children={
+													<MusicList></MusicList>
+												}
+											></Route>
 											<Redirect
 												to={{
 													pathname:
@@ -319,6 +327,8 @@ function App() {
 									setDuration,
 									setUrl,
 									setName,
+									currI,
+									setCurrI,
 								}}
 							>
 								<MusicPlayer></MusicPlayer>

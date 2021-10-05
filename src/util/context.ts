@@ -11,6 +11,8 @@ interface MusicContextInterface {
 	setDuration: Dispatch<string>;
 	songIds: number[];
 	setSongIds: Dispatch<number[]>;
+	currI:number;
+	setCurrI:Dispatch<number>;
 }
 export const MusicContext = createContext<MusicContextInterface>({
 	name: "",
@@ -23,4 +25,6 @@ export const MusicContext = createContext<MusicContextInterface>({
 	duration: "",
 	songIds: [],
 	setSongIds: () => {},
+	currI:-1,
+	setCurrI:()=>{}
 });

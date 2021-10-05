@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-
+import React, { useState } from "react";
 
 export const useUpdate = () => {
-    const [_,update]=useState<any[]>([]);
-    return update;
-}
+	const [_, update] = useState<any[]>([]);
+	return () => {
+		update([]);
+	};
+};

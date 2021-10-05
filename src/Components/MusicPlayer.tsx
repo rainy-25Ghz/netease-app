@@ -7,9 +7,20 @@ import {
 	VolumeUp,
 } from "@mui/icons-material";
 import { IconButton, LinearProgress, Slider } from "@mui/material";
-import React, { createContext, useContext, useState } from "react";
+import React, {
+	ChangeEvent,
+	createContext,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
+import useSWR from "swr";
+
+import { useAudio } from "../hooks/useAudio";
+import { useUpdate } from "../hooks/useUpdate";
 
 import { MusicContext } from "../util/context";
+import { fetcher } from "../util/network";
 import { StyledListPic } from "./RecommendList";
 
 const Layout = styled.div`
@@ -42,11 +53,11 @@ const Layout = styled.div`
 		.progress {
 			height: 1rem;
 			width: 24rem;
-            display: inline-flex;
-            .MuiSlider-root{
-                margin-left: 1rem;
-                margin-right: 1rem;
-            }
+			display: inline-flex;
+			.MuiSlider-root {
+				margin-left: 1rem;
+				margin-right: 1rem;
+			}
 		}
 	}
 	.volume {
@@ -71,8 +82,45 @@ const Layout = styled.div`
 interface Props {}
 
 export const MusicPlayer = () => {
-	const [isPlaying, setIsPlaying] = useState(false);
-	const { name, artists, duration, url } = useContext(MusicContext);
+	const { name, artists, duration, url, currI, songIds, setCurrI } =
+		useContext(MusicContext);
+	const audio = useAudio();
+	const [progress, setProgress] = useState(0);
+	const [volume, setVolume] = useState(50);
+	const { data: urlData } = useSWR(() => {
+		// console.log(currI, songIds);
+		if (currI >= 0 && songIds && songIds.length > 0) {
+			const songId = songIds[currI];
+			return `/song/url?id=${songId}`;
+		} else {
+			return `/song/url?id=${0}`;
+		}
+	}, fetcher);
+
+	const [paused, setPaused] = useState(true);
+	console.log("rerender", audio.paused);
+	useEffect(() => {
+		const listener1 = () => {
+			setPaused(false);
+		};
+		const listener2 = () => {
+			setPaused(true);
+		};
+		audio.addEventListener("play", listener1);
+		audio.addEventListener("pause", listener2);
+		return () => {
+			audio.removeEventListener("play", listener1);
+			audio.removeEventListener("pause", listener2);
+		};
+	}, []);
+
+	useEffect(() => {
+		if (urlData && urlData.data[0]) {
+			audio.src = urlData.data[0].url;
+			console.log(audio);
+		}
+	}, [urlData]);
+
 	return (
 		<Layout>
 			<div className="info">
@@ -87,27 +135,60 @@ export const MusicPlayer = () => {
 					<IconButton className="prev-btn">
 						<SkipPrevious></SkipPrevious>
 					</IconButton>
+
+					{!paused ? (
+						<IconButton
+							className="play-btn"
+							onClick={() => {
+								if (
+									urlData &&
+									urlData.data &&
+									urlData.data[0]
+								) {
+									audio.pause();
+								}
+							}}
+						>
+							<Pause />
+						</IconButton>
+					) : (
+						<IconButton
+							className="play-btn"
+							onClick={() => {
+								if (
+									urlData &&
+									urlData.data &&
+									urlData.data[0]
+								) {
+									audio.play();
+								}
+							}}
+						>
+							<PlayArrow />
+						</IconButton>
+					)}
 					<IconButton
-						className="play-btn"
+						className="next-btn"
 						onClick={() => {
-							setIsPlaying((val) => !val);
+							audio.pause();
+							setCurrI((currI + 1) % songIds.length);
 						}}
 					>
-						{isPlaying ? <Pause /> : <PlayArrow />}
-					</IconButton>
-					<IconButton className="next-btn">
 						<SkipNext></SkipNext>
 					</IconButton>
-				</div>
-				<div className="progress">
-					<span className="dur">{" 00:00 "}</span>
-					<Slider size="small" defaultValue={50} />
-					<span className="dur">{duration}</span>
 				</div>
 			</div>
 			<div className="volume">
 				<VolumeUp className="icon"></VolumeUp>
-				<Slider defaultValue={50} />
+				<Slider
+					onChange={(_, newVal) => {
+						if (typeof newVal === "number") {
+							audio.volume = newVal / 100;
+							setVolume(newVal);
+						}
+					}}
+					value={volume}
+				/>
 			</div>
 		</Layout>
 	);

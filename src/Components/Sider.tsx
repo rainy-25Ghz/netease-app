@@ -13,7 +13,7 @@ const linkData = [
 const linkDataLogin = [
 	{ path: "/findmusic", text: "发现音乐" },
 	{ path: "/videos", text: "视频" },
-	{ path: null, text: "收藏的音乐" },
+	{ path: null, text: "我的音乐" },
 ];
 export const Sider = () => {
 	const [index, setIndex] = useState(0);
@@ -22,8 +22,8 @@ export const Sider = () => {
 		() => `/user/playlist?uid=${loginData.uid}`,
 		fetcher
 	);
-	const location=useLocation();
-	
+	const location = useLocation();
+
 	return (
 		<SiderBar>
 			{!loginData.loginStatus &&
@@ -33,8 +33,7 @@ export const Sider = () => {
 							key={text}
 							path={path}
 							text={text}
-							activated={location.pathname.indexOf(path)!==-1}
-							
+							activated={location.pathname.indexOf(path) !== -1}
 						></SiderLink>
 					);
 				})}
@@ -46,14 +45,28 @@ export const Sider = () => {
 								key={text}
 								path={path}
 								text={text}
-								activated={location.pathname.indexOf(path)!==-1}
+								activated={
+									location.pathname.indexOf(path) !== -1
+								}
 							></SiderLink>
 						);
 					else return <SiderTitle key={text}>{text}</SiderTitle>;
 				})}
-			{loginData.loginStatus && listData && (
+			{/* {loginData.loginStatus && listData && (
 				<p>{listData?.playlist?.length}</p>
-			)}
+			)} */}
+			{loginData.loginStatus &&
+				listData &&
+				listData.playlist.map((item: any) => {
+					return (
+						<SiderLink
+							key={item.id}
+							path={`/list/${item.id}`}
+							text={item.name}
+							activated={location.pathname.indexOf(`/list/${item.id}`) !== -1}
+						></SiderLink>
+					);
+				})}
 		</SiderBar>
 	);
 };

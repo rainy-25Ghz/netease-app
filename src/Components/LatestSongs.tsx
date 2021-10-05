@@ -161,7 +161,7 @@ export const PlayButton = ({ onClick }: PlayButtonProps) => {
 };
 export const LatestSongs = () => {
 	const [songId, setSongId] = useState(0);
-	const { songIds, setSongIds, setDuration, setArtists, setName, setUrl } =
+	const { songIds, setSongIds, setDuration, setArtists, setName, setUrl,setCurrI } =
 		useContext(MusicContext);
 	const [type, setType] = useState(0);
 	const { data: res } = useSWR(`/top/song?type=${type}`, fetcher);
@@ -225,6 +225,10 @@ export const LatestSongs = () => {
 							setUrl(first.url);
 						}
 						res&&setSongId(res.data[0].id);
+						const i=songIds.indexOf(songId);
+						if(i>=0){
+							setCurrI(i);
+						}
 					}}
 				/>
 			</div>
