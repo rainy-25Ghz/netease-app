@@ -1,7 +1,4 @@
 import React, {
-	createContext,
-	useContext,
-	useEffect,
 	useRef,
 	useState,
 } from "react";
@@ -12,9 +9,6 @@ import { Header, HeaderContent } from "./Components/Header";
 import { Layout } from "./Components/Layout";
 import { ScrollContent } from "./Components/ScrollContent";
 import { Sider } from "./Components/Sider";
-import { SiderLink } from "./Components/SiderLink";
-import { Tab } from "./Components/Tab";
-import { TabBar } from "./Components/TabBar";
 import {
 	checkCookie,
 	login,
@@ -22,12 +16,10 @@ import {
 	logout,
 } from "./hooks/useAuth";
 import {
-	Link,
 	Route,
 	BrowserRouter as Router,
 	Switch,
 	Redirect,
-	useHistory,
 } from "react-router-dom";
 import { red } from "@mui/material/colors";
 import { styled } from "@mui/system";
@@ -93,7 +85,7 @@ function App() {
 	const [errTextField, setErrTextField] = useState(false);
 	const [loginStatus, setLoginStatus] = useState(checkCookie());
 	const [uid, setUid] = useState<number | null>(null);
-	const { data: user, error } = useSWR(
+	const { data: user } = useSWR(
 		() => `/user/detail?uid=${uid}`,
 		fetcher
 	);

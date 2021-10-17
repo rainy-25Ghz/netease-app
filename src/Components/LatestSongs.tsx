@@ -1,16 +1,13 @@
 import styled from "@emotion/styled";
 import { ArrowForwardIos } from "@mui/icons-material";
 import { Button, CircularProgress } from "@mui/material";
-import React, {
-	Dispatch,
-	useCallback,
+import {
 	useContext,
 	useEffect,
 	useMemo,
-	useRef,
 	useState,
 } from "react";
-import useSWR, { Middleware } from "swr";
+import useSWR from "swr";
 import { fetcher } from "../util/network";
 import { StyledListPic } from "./RecommendList";
 import EqualizerIcon from "@mui/icons-material/Equalizer";

@@ -1,14 +1,13 @@
 import styled from "@emotion/styled";
-import { Avatar, CircularProgress, List } from "@mui/material";
-import React, { useContext, useEffect, useMemo } from "react";
+import { Avatar, CircularProgress } from "@mui/material";
+import { useContext, useEffect, useMemo } from "react";
 import { useParams } from "react-router";
 import useSWR from "swr";
 import { getDur } from "../util/math";
-import { fetcher, fetcherAll } from "../util/network";
+import { fetcher } from "../util/network";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { StyledListPic } from "./RecommendList";

@@ -6,11 +6,9 @@ import {
 	SkipPrevious,
 	VolumeUp,
 } from "@mui/icons-material";
-import { IconButton, LinearProgress, Slider } from "@mui/material";
+import { IconButton, Slider } from "@mui/material";
 import { Box } from "@mui/system";
-import React, {
-	ChangeEvent,
-	createContext,
+import {
 	useContext,
 	useEffect,
 	useState,
@@ -18,7 +16,6 @@ import React, {
 import useSWR from "swr";
 
 import { useAudio } from "../hooks/useAudio";
-import { useUpdate } from "../hooks/useUpdate";
 
 import { MusicContext } from "../util/context";
 import { fetcher } from "../util/network";
