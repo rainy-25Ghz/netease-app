@@ -19,11 +19,6 @@ const StyledDiv = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	@media screen and (max-width: 600px) {
-		width: 100%;
-		margin-right: 0;
-		justify-content: center;
-	}
 	@media screen and (min-width: 600px) {
 		&::-webkit-scrollbar {
 			width: 10px;

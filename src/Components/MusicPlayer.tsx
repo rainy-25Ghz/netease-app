@@ -59,7 +59,6 @@ const Layout = styled.div`
 		}
 	}
 	.volume {
-
 		display: flex;
 		align-items: center;
 		width: 20%;
