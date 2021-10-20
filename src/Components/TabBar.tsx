@@ -1,9 +1,6 @@
 import styled from "@emotion/styled";
 const StyledHead = styled.header`
-	@media screen and (max-width: 600px) {
-		left: 0px;
-    justify-content: center;
-	}
+
 	display: flex;
 	position: fixed;
 	top: 4rem;

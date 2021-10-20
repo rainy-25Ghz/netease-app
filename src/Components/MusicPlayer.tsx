@@ -59,9 +59,7 @@ const Layout = styled.div`
 		}
 	}
 	.volume {
-		@media screen and (max-width:600px){
-			display: none;
-		}
+
 		display: flex;
 		align-items: center;
 		width: 20%;

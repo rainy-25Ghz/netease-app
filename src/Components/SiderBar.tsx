@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 const StyledAside = styled.aside`
-	@media screen and (max-width: 600px) {
-		display: none;
-	}
+
 	top: 4rem;
 	height: calc(100vh - 4rem - 6rem);
 	position: fixed;
@@ -11,18 +9,7 @@ const StyledAside = styled.aside`
 	z-index: 1000;
 `;
 const StyledDiv = styled.div`
-	@media screen and (max-width: 600px) {
-		display: none;
-		&::-webkit-scrollbar {
-			width: initial;
-			background-color: initial;
-		}
-		&::-webkit-scrollbar-thumb {
-			width: initial;
-			border-radius: initial;
-			background-color: initial;
-		}
-	}
+
 	border-color: rgba(237, 242, 247, 1);
 	width: 100%;
 	height: 100%;
