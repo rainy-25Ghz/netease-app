@@ -4,6 +4,7 @@ import { Typography } from "@mui/material";
 import React, { ReactNode } from "react";
 import { Link, useHistory } from "react-router-dom";
 const StyledTypo = styled.span`
+
 	font-size: 24px;
 	width: 86rem;
 	margin-top: 1rem;

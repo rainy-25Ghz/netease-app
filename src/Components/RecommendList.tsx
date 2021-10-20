@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { fetcher } from "../util/network";
 
 const StyledContainer = styled.div`
+
     display: flex;
     width: 86rem;
     flex-wrap: wrap;
@@ -16,6 +17,7 @@ const StyledContainer = styled.div`
         flex-direction: column;
         width: 16rem;
         height: 20rem;
+
         .link {
             text-decoration: none;
             text-align: left;
@@ -37,6 +39,7 @@ export const StyledListPic = styled.div<ListPicProps>`
     background-image: url(${(props) => props.src?props.src:"/default.png"});
     background-size: contain;
     flex-shrink: 0;
+
 `;
 const defaultData = new Array(10).fill(null);
 export const RecommendList = () => {

@@ -14,13 +14,7 @@ const StyledDiv = styled.div`
             color:white;
         }
 	}
-	@media screen and (max-width: 600px) {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		width: 100vw;
-	}
-	
+
 `;
 const StyledSlider = styled(Slider)``;
 interface ContainerProps {

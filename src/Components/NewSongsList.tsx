@@ -6,6 +6,8 @@ import { useAudio } from "../hooks/useAudio";
 import { MusicContext } from "../util/context";
 import { fetcher } from "../util/network";
 const StyledDiv = styled.div`
+
+
 	width: 86rem;
 	height: 20rem;
 	display: flex;
