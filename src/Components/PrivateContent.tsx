@@ -6,7 +6,6 @@ import { StyledListPic } from "./RecommendList";
 import { CircularProgress } from "@mui/material";
 interface Props {}
 const StyledDiv = styled.div`
-
     display: flex;
     width: 86rem;
     flex-wrap: wrap;

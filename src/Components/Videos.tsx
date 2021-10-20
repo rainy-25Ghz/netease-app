@@ -49,7 +49,6 @@ const StyledContainer = styled.div`
 		justify-content: space-between;
 		align-content: space-between;
 		.item {
-
 			display: flex;
 			flex-direction: column;
 			width: 16rem;
