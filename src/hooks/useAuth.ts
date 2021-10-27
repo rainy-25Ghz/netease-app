@@ -23,7 +23,4 @@ interface LoginStatusContextInterface{
 
 export const LoginStatusContext = createContext<LoginStatusContextInterface>({loginStatus:false,uid:null});
 
-export const useAuth=()=>{
-  return useContext(LoginStatusContext);
-}
 
